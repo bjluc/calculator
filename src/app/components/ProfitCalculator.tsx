@@ -6,15 +6,25 @@ const ProfitCalculator = () => {
   const [totalRevenue, setTotalRevenue] = useState('')
 
   const accounts = [
-    { name: 'Saving', percentage: 7, color: 'bg-green-500' },
-    { name: "Owner's Pay", percentage: 50, color: 'bg-blue-500' },
-    { name: 'Operating Expenses', percentage: 18, color: 'bg-purple-500' },
+    { name: 'Saving', percentage: 5, color: 'bg-green-500' },
+    { name: "Owner's Pay", percentage: 45, color: 'bg-blue-500' },
+    { name: 'Operating Expenses', percentage: 15, color: 'bg-purple-500' },
     { name: 'Tax', percentage: 25, color: 'bg-red-500' },
+    { name: 'Car Expense', percentage: 10, color: 'bg-yellow-500' },
   ]
 
   const calculateAmount = (percentage: number) => {
     if (!totalRevenue) return 0
     return (parseFloat(totalRevenue) * (percentage / 100)).toFixed(2)
+  }
+
+  const calculateSplitAmount = () => {
+    if (!totalRevenue) return 0
+    const ownersPay = accounts.find((a) => a.name === "Owner's Pay")
+    const otherAccountsPercentage = 100 - (ownersPay?.percentage || 0)
+    return (parseFloat(totalRevenue) * (otherAccountsPercentage / 100)).toFixed(
+      2
+    )
   }
 
   return (
@@ -59,6 +69,15 @@ const ProfitCalculator = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className='mt-6 p-4 bg-gray-200 rounded-lg'>
+          <h3 className='font-bold text-gray-800'>
+            Split Amount (excl. Owner's Pay)
+          </h3>
+          <p className='text-xl font-bold text-gray-900'>
+            £{calculateSplitAmount()}
+          </p>
         </div>
 
         <div className='mt-6 text-sm text-gray-600'>
